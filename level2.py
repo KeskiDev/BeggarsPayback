@@ -8,7 +8,20 @@ from pygame.locals import *
 
 from vec2d import vec2d
 
+def checkCollision(player,credit):
+    return player.colliderect(credit)
 
+    '''for a, b in [(player,credit), (credit,player)]:
+        if(insideRect(a.left,a.top,b))or insideRect(a.left, a.bottom, b) or(insideRect(a.right, a.top, b)) or(insideRect(a.right, a.bottom, b)):
+            return True
+    return False
+
+def insideRect(x,y,rect):
+    if(x>rect.left) and (x < rect.right) and (y > rect.top) and (y < rect.bottom):
+        return True
+    else:
+        return False
+'''
 class Creep(Sprite):
 
 
@@ -80,16 +93,17 @@ class Creep(Sprite):
 	
 	
 #----------------------- end of class ----------------------------------------------    
+playerPic = pygame.image.load('falcon.png')
+credits = pygame.image.load("bountyLoot.png")
+player_rect = playerPic.get_rect()
+credit_rect = credits.get_rect()
 
 def run_game():
     screen_w, screen_h = 1000, 1000
     background = 0, 0, 0
     enemyPi = 'tie.png'
-    playerPic = pygame.image.load('falcon.png')
-    credits = pygame.image.load("bountyLoot.png")
+    
     pygame.display.set_caption("Beggars Payback")
-
-    playerPicRect = playerPic.get_rect()
     
     tieFightersNum = 3
     credit_count = 0
@@ -101,14 +115,17 @@ def run_game():
 
     font = pygame.font.SysFont("monospace",15)
 
-    credit_bounds = credits.get_rect()
-
     #start position for the player
     playerStartX = 260
     playerStartY = 300
 
+    player_rect.x=playerStartX
+    player_rect.y=playerStartY
+
     creditX = randint(0, screen_w)
     creditY = randint(0, screen_h)
+    credit_rect.x = creditX
+    credit_rect.y = creditY
 
     # Create N_CREEPS random creeps.
     tie = []    
@@ -122,7 +139,7 @@ def run_game():
                             0.2))
         
     while True:
-        time_passed = clock.tick(60)
+        time_passed = clock.tick(80)
         label = font.render("Loot: "+ str(credit_count),1,(255,255,0))
         label_pos = label.get_rect(centerx=screen.get_width()/2)
         
@@ -131,36 +148,59 @@ def run_game():
                 exit_game()
 
         if(pygame.key.get_pressed()[pygame.K_UP] !=0):
-            playerStartY -=10
-            if playerStartY >= creditY - credits.get_height() or playerStartX == creditX + credits.get_width():
-                credit_count += 1
-                screen.blit(label,label_pos)
+            playerStartY -=5
+            player_rect.y -=5
+            #print player_rect.y
+            if checkCollision(credit_rect,player_rect):
+                credit_count +=1
+                screen.blit(label,(label_pos))
                 creditX = randint(0, screen_w)
                 creditY = randint(0, screen_h)
-            
+                credit_rect.x = creditX
+                credit_rect.y = creditY
+                screen.blit(credits, (creditX,creditY),credit_rect)
+                screen.blit(credits,credit_rect)
+                
         if(pygame.key.get_pressed()[pygame.K_DOWN] !=0):
-            playerStartY +=10
-            if playerStartY >= creditY - credits.get_height() or playerStartX == creditX + credits.get_width():
-                credit_count += 1
-                screen.blit(label,label_pos)
+            playerStartY +=5
+            player_rect.y +=5
+            if checkCollision(credit_rect,player_rect):
+                credit_count +=1
+                screen.blit(label,(label_pos))
                 creditX = randint(0, screen_w)
                 creditY = randint(0, screen_h)
+                credit_rect.x = creditX
+                credit_rect.y = creditY
+                screen.blit(credits, (creditX,creditY),credit_rect)
+                screen.blit(credits,credit_rect)
+            
             
         if(pygame.key.get_pressed()[pygame.K_LEFT] !=0):
-            playerStartX -=10
-            if playerStartY >= creditY - credits.get_height() or playerStartX == creditX + credits.get_width():
-                credit_count += 1
-                screen.blit(label,label_pos)
+            playerStartX -=5
+            player_rect.x -=5
+            if checkCollision(credit_rect,player_rect):
+                credit_count +=1
+                screen.blit(label,(label_pos))
                 creditX = randint(0, screen_w)
                 creditY = randint(0, screen_h)
+                credit_rect.x = creditX
+                credit_rect.y = creditY
+                screen.blit(credits, (creditX,creditY),credit_rect)
+                screen.blit(credits,credit_rect)
+            
             
         if(pygame.key.get_pressed()[pygame.K_RIGHT] !=0):
-            playerStartX +=10
-            if playerStartY >= creditY - credits.get_height() or playerStartX == creditX + credits.get_width():
-                credit_count += 1
-                screen.blit(label,label_pos)
+            playerStartX +=5
+            player_rect.x +=5
+            if checkCollision(credit_rect,player_rect):
+                credit_count +=1
+                screen.blit(label,(label_pos))
                 creditX = randint(0, screen_w)
                 creditY = randint(0, screen_h)
+                credit_rect.x = creditX
+                credit_rect.y = creditY
+                screen.blit(credits, (creditX,creditY),credit_rect)
+                screen.blit(credits,credit_rect)
 
         if(pygame.key.get_pressed()[pygame.K_ESCAPE]):
             exit_game()
@@ -168,7 +208,9 @@ def run_game():
         
         screen.fill(background)
         screen.blit(playerPic, (playerStartX,playerStartY))
-        screen.blit(credits, (creditX,creditY))
+        screen.blit(playerPic, player_rect)
+        screen.blit(credits, (creditX,creditY),credit_rect)
+        screen.blit(credits,credit_rect)
         screen.blit(label,label_pos)
         
         # Update the enemies
@@ -182,6 +224,7 @@ def run_game():
         pygame.display.flip()
 
 
+     
 def exit_game():
     sys.exit()
 
