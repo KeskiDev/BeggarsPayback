@@ -11,7 +11,6 @@ from pygame.locals import *
 
 
 playerPic = pygame.image.load('falcon.png')
-
 player_rect = playerPic.get_rect()
 
 
@@ -112,16 +111,17 @@ def runGame(badGuy, num_of_baddies,level):
     screen_w, screen_h = 1500, 1000
     background = 0, 0, 0
     credit_count = 0
+   
     enemyPic = badGuy
-    enemy_rect = enemyPic.get_rect()
+    enemy_rect = enemyPic
 
     global playerPic
 
     if(num_of_baddies == 1):
         enemyStartX = randint(0,screen_w -80)
         enemyStartY = randint(0,screen_h -50)
-        enemy_rect.x=enemyStartX
-        enemy_rect.y=enemyStartY
+        enemy_rect.x = enemyStartX
+        enemy_rect.y = enemyStartY
         
     
     elif(num_of_baddies == 2):
@@ -131,8 +131,8 @@ def runGame(badGuy, num_of_baddies,level):
         enemyStartX = randint(0,screen_w -80)
         enemyStartY = randint(0,screen_h -50)
     
-        enemy_rect.x=enemyStartX
-        enemy_rect.y=enemyStartY
+        enemy_rect.x = enemyStartX
+        enemy_rect.y = enemyStartY
 
         enemy2X = randint(0,screen_w -80)
         enemy2Y = randint(0,screen_h -50)
@@ -148,8 +148,8 @@ def runGame(badGuy, num_of_baddies,level):
         enemyStartX = randint(0,screen_w -80)
         enemyStartY = randint(0,screen_h -50)
     
-        enemy_rect.x=enemyStartX
-        enemy_rect.y=enemyStartY
+        enemy_rect.x = enemyStartX
+        enemy_rect.y = enemyStartY
 
         enemy2X = randint(0,screen_w -80)
         enemy2Y = randint(0,screen_h -50)
@@ -381,7 +381,11 @@ def runGame(badGuy, num_of_baddies,level):
         if(pygame.key.get_pressed()[pygame.K_ESCAPE]):
             exit_game()
 
+
         if(num_of_baddies == 1):
+            screen.blit(enemyPic,(enemyStartX,enemyStartY))
+            screen.blit(enemyPic,enemy_rect)
+        ''' if(num_of_baddies == 1):
             screen.blit(enemyPic,(enemyStartX,enemyStartY))
             screen.blit(enemyPic,enemy_rect)
         elif(num_of_baddies ==2):
@@ -396,7 +400,7 @@ def runGame(badGuy, num_of_baddies,level):
             screen.blit(enemy2,enemy2_rect)
             screen.blit(enemy3, (enemy3X,enemy3Y))
             screen.blit(enemy3,enemy3_rect)
-
+        '''
         screen.fill(background)
         screen.blit(playerPic, (playerStartX,playerStartY))
         screen.blit(label,label_pos)
