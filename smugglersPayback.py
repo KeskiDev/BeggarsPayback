@@ -2,9 +2,6 @@ import sys
 from random import randint, choice
 from math import sin, cos, radians
 import os
-
-#os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (100,80)
-
 import pygame
 from pygame.sprite import Sprite
 from pygame.locals import *
@@ -20,7 +17,7 @@ credit_count = 0
 pygame.init()
 screen = pygame.display.set_mode((1500, 1000), 0, 32)
 clock = pygame.time.Clock()
-pygame.display.set_caption('Beggars Payback')
+pygame.display.set_caption('Smugglers Payback')
 
 font = pygame.font.SysFont("monospace",30)
 
@@ -35,7 +32,7 @@ def winner():
                 (screen_w, screen_h), 0, 32)
 
     font = pygame.font.SysFont("monospace",60)
-    font2 = pygame.font.SysFont("monospace",40)
+    font2 = pygame.font.SysFont("monospace",30)
     
     
     while True:
@@ -50,9 +47,9 @@ def winner():
 
         
         label = font.render("You Won!! You paid Jabba in Full.",1,(255,255,0))
-        label_pos = label.get_rect(centerx=screen.get_width()/2,centery = screen.get_width()/2)
-        label2 = font2.render("Try not to be a scruffy nerf herder from here on out...",1,(255,255,0))
-        label2_pos = label.get_rect(centerx = screen.get_width()/2,centery = screen.get_width()/2 + 70) 
+        label_pos = label.get_rect(centerx=screen.get_width()/2,centery = screen.get_height()/2+120)
+        label2 = font2.render("Looks like Jabba will have to find a new wall decoration...",1,(255,255,0))
+        label2_pos = label.get_rect(centerx = screen.get_width()/2 +40,centery = screen.get_height()/2 + 200) 
 
         screen.fill(background)
         screen.blit(label,label_pos)
@@ -84,7 +81,7 @@ def welcome():
         
         label = font.render("You have a debt on your head. Pick up the coins to pay Jabba the Hutt back.",1,(255,255,0))
         label_pos = label.get_rect(centerx=screen.get_width()/2,centery = screen.get_width()/2)
-        label2 = font.render("Each level you need to pick up 15 coins to move onto the next level." ,1, (255,255,0))
+        label2 = font.render("Each level you need to pick up 25 coins to move onto the next level." ,1, (255,255,0))
         label2_pos = label2.get_rect(centerx=screen.get_width()/2,centery = screen.get_width()/2 + 35)
         label25 = font.render("Use the arrow keys to fly your ship around",1,(255,255,0))
         label25_pos = label25.get_rect(centerx=screen.get_width()/2,centery = screen.get_width()/2 + 70)
@@ -104,9 +101,8 @@ def welcome():
 
         pygame.display.flip()
 
+# ---------------------------------------------------level 1 -----------------------------------------------------------------
 def levelOne(badGuy):
-
-    #just do a picture of a space worm to move around the screen randomly
     screen_w, screen_h = 1500, 1000
     background = 0, 0, 0
 
@@ -124,15 +120,14 @@ def levelOne(badGuy):
     screen = pygame.display.set_mode((screen_w, screen_h), 0, 32)
     clock = pygame.time.Clock()
 
-    #start position for the player
-    playerStartX = 260
-    playerStartY = 300
+    playerStartX = screen.get_width()/2
+    playerStartY = screen.get_height()/2 -50
     
     player_rect.x=playerStartX
     player_rect.y=playerStartY
 
-    creditX = randint(0, screen_w -50)
-    creditY = randint(0, screen_h-80)
+    creditX = randint(0, screen_w -10)
+    creditY = randint(0, screen_h-20)
     credit_rect.x = creditX
     credit_rect.y = creditY
     
@@ -148,7 +143,7 @@ def levelOne(badGuy):
             if event.type == pygame.QUIT:
                 exit_game()
 
-        if(credit_count == 15):
+        if(credit_count == 25):
             levelTwo(pygame.image.load('tie.png'))
         
         
@@ -175,9 +170,8 @@ def levelOne(badGuy):
             screen.blit(credits,credit_rect)
         
         if(pygame.key.get_pressed()[pygame.K_UP] !=0):
-            playerStartY -=7
-            player_rect.y -=7
-            #print player_rect.y
+            playerStartY -=9
+            player_rect.y -=9
             if checkCollision(credit_rect,player_rect):
                 credit_count +=1
                 screen.blit(label,(label_pos))
@@ -189,8 +183,8 @@ def levelOne(badGuy):
                 screen.blit(credits,credit_rect)
             
         if(pygame.key.get_pressed()[pygame.K_DOWN] !=0):
-            playerStartY +=7
-            player_rect.y +=7
+            playerStartY +=9
+            player_rect.y +=9
             if checkCollision(credit_rect,player_rect):
                 credit_count +=1
                 screen.blit(label,(label_pos))
@@ -202,8 +196,8 @@ def levelOne(badGuy):
                 screen.blit(credits,credit_rect)
             
         if(pygame.key.get_pressed()[pygame.K_LEFT] !=0):
-            playerStartX -=7
-            player_rect.x -=7
+            playerStartX -=9
+            player_rect.x -=9
             if checkCollision(credit_rect,player_rect):
                 credit_count +=1
                 screen.blit(label,(label_pos))
@@ -215,8 +209,8 @@ def levelOne(badGuy):
                 screen.blit(credits,credit_rect)
             
         if(pygame.key.get_pressed()[pygame.K_RIGHT] !=0):
-            playerStartX +=7
-            player_rect.x +=7
+            playerStartX +=9
+            player_rect.x +=9
             if checkCollision(credit_rect,player_rect):
                 credit_count +=1
                 screen.blit(label,(label_pos))
@@ -236,8 +230,9 @@ def levelOne(badGuy):
         screen.blit(enemyPic,(enemyStartX,enemyStartY))
         screen.blit(label,label_pos)
         screen.blit(playerPic, player_rect)
+    
 
-        screen.blit(credits, (creditX,creditY),credit_rect)
+        screen.blit(credits, (creditX,creditY))
         screen.blit(credits,credit_rect)
         screen.blit(label,label_pos)
         
@@ -256,15 +251,13 @@ def levelTwo(badGuy):
     enemy3 = enemyPic
     enemy_rect = enemyPic.get_rect()
     enemy2_rect = enemy2.get_rect()
-    enemy3_rect = enemy2.get_rect()
-    
-    #global credit_count
+    enemy3_rect = enemy3.get_rect()
 
     screen = pygame.display.set_mode(
                 (screen_w, screen_h), 0, 32)
     clock = pygame.time.Clock()
 
-    #start position for the player
+
     playerStartX = 260
     playerStartY = 300
     
@@ -302,7 +295,7 @@ def levelTwo(badGuy):
             if event.type == pygame.QUIT:
                 exit_game()
 
-        if(credit_count == 15):
+        if(credit_count == 25):
             levelThree(pygame.image.load('sd.png'))
         
         enemyStartX +=9
@@ -463,7 +456,6 @@ def levelThree(badGuy):
     enemy_rect = enemyPic.get_rect()
     enemy2_rect = enemy2.get_rect()
 
-    #start position for the player
     playerStartX = 260
     playerStartY = 300
     
@@ -495,7 +487,7 @@ def levelThree(badGuy):
             if event.type == pygame.QUIT:
                 exit_game()
 
-        if credit_count == 15:
+        if credit_count == 25:
             winner()
             
         enemyStartX +=12
@@ -547,7 +539,6 @@ def levelThree(badGuy):
         if(pygame.key.get_pressed()[pygame.K_UP] !=0):
             playerStartY -=12
             player_rect.y -=12
-            #print player_rect.y
             if checkCollision(credit_rect,player_rect):
                 credit_count +=1
                 screen.blit(label,(label_pos))
@@ -623,6 +614,4 @@ def levelThree(badGuy):
 def exit_game():
     sys.exit()
 
-#winner()
-#levelThree(pygame.image.load('tie.png'))
 welcome()
